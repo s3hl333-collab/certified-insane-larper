@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The International Larping Certification Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,500&family=Pinyon+Script&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--bg:#151311;--bg2:#1d1a17;--ink:#ece6d8;--mute:#9a9183;--gold:#b8955a;--bronze:#8c6a3f;--paper:#f4ecdb;--line:#2e2a25;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Instrument Sans',system-ui,sans-serif;overflow-x:hidden}
+.serif{font-family:'Cormorant Garamond',Georgia,serif}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 24px;position:relative;overflow:hidden}
+.eyebrow{font-size:12px;letter-spacing:.28em;color:var(--gold);margin-bottom:36px}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-size:clamp(40px,7.2vw,92px);line-height:1.02;margin:0 0 28px;letter-spacing:-.01em;max-width:13em}
+h1 span{display:block;color:var(--mute);font-style:italic}
+.sub{max-width:34em;color:var(--mute);font-size:17px;line-height:1.6;margin:0 0 44px}
+.btn{font:600 13px 'Instrument Sans',sans-serif;letter-spacing:.2em;border:0;cursor:pointer;padding:18px 40px;border-radius:2px;color:#1a1510;background:linear-gradient(#cdaa70,#a9854f);box-shadow:0 1px 0 #e6cc9a inset,0 10px 24px -12px #000;transition:transform .15s,filter .2s}
+.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}
+.btn:active{transform:translateY(1px) scale(.98)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:0 0 0 1px #4a4237 inset}
+.btn.ghost:hover{box-shadow:0 0 0 1px var(--gold) inset}
+.btn:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.disc{margin-top:22px;font-size:13px;color:#6f675b}
+.ball{position:absolute;left:-60px;top:-60px;width:34px;height:34px;opacity:0;pointer-events:none;animation:fly 22s linear 3s infinite;z-index:0}
+@keyframes fly{0%{transform:translate(0,0) rotate(0);opacity:0}4%{opacity:.55}30%{transform:translate(115vw,110vh) rotate(720deg);opacity:.55}32%,100%{transform:translate(115vw,110vh);opacity:0}}
+.hero>*:not(.ball){position:relative;z-index:1}
+#gen{display:none;padding:72px 24px 96px;background:var(--bg2);border-top:1px solid var(--line)}
+#gen.open{display:block;animation:rise .5s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.wrap{max-width:1100px;margin:0 auto}
+.panel{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-bottom:36px}
+.field{flex:1 1 320px}
+label{display:block;font-size:13px;color:var(--mute);margin-bottom:10px}
+input{width:100%;font:500 20px 'Cormorant Garamond',serif;padding:14px 16px;background:var(--bg);color:var(--ink);border:1px solid #4a4237;border-radius:2px}
+input.bad{border-color:#b5523f}
+.err{color:#d98a78;font-size:13px;min-height:18px;margin-top:8px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px}
+.stage{position:relative}
+#box{width:100%;position:relative;overflow:hidden;box-shadow:0 30px 60px -30px #000}
+#cert{width:1123px;height:794px;transform-origin:0 0;position:relative;background:var(--paper);color:#2b2118;font-family:'Cormorant Garamond',Georgia,serif;text-align:center}
+#cert .tex{position:absolute;inset:0;opacity:.5}
+#cert .b1{position:absolute;inset:26px;border:3px solid #a88650}
+#cert .b2{position:absolute;inset:38px;border:1px solid #a88650}
+#cert .c{position:absolute;width:64px;height:64px}
+.c.tl{left:44px;top:44px}.c.tr{right:44px;top:44px;transform:scaleX(-1)}.c.bl{left:44px;bottom:44px;transform:scaleY(-1)}.c.br{right:44px;bottom:44px;transform:scale(-1)}
+.t{position:absolute;left:0;right:0}
+.org{top:68px;font:600 15px 'Instrument Sans',sans-serif;letter-spacing:.34em;color:#6e5230}
+.osub{top:94px;font:500 11px 'Instrument Sans',sans-serif;letter-spacing:.3em;color:#9a8057}
+.title{top:122px;font-weight:600;font-size:56px;line-height:1.02;letter-spacing:.08em;color:#2b2118}
+.pre{top:262px;font-style:italic;font-size:22px;color:#5d4a33}
+.nm{top:292px;height:92px;display:flex;align-items:center;justify-content:center}
+.nm span{font:400 68px 'Pinyon Script',cursive;white-space:nowrap;color:#1f160d;display:inline-block}
+.nline{position:absolute;left:260px;right:260px;top:388px;border-top:1px solid #a88650}
+.body{top:404px;left:270px;right:270px;font-size:19px;line-height:1.4;color:#4a3b2a}
+.stm{top:488px;font-weight:700;font-size:38px;letter-spacing:.06em;color:#7a5a2c}
+.art{position:absolute;right:64px;top:392px;width:190px;height:240px;opacity:.9}
+.bot{position:absolute;left:96px;right:96px;bottom:92px;display:flex;justify-content:space-between;align-items:flex-end}
+.sig{width:250px;text-align:center}
+.sig b{display:block;font:400 38px 'Pinyon Script',cursive;color:#2a2f4a;border-bottom:1px solid #8c6a3f;padding-bottom:2px}
+.sig small,.meta small{font:500 10px 'Instrument Sans',sans-serif;letter-spacing:.2em;color:#7d6841}
+.meta{width:250px;text-align:right;font:500 12px 'Instrument Sans',sans-serif;line-height:1.9;color:#4a3b2a}
+.meta b{font-weight:600}
+.seal{position:absolute;left:50%;bottom:62px;margin-left:-55px;width:110px;height:110px}
+.foot{bottom:50px;font:italic 500 13px 'Cormorant Garamond',serif;color:#7d6841}
+.stamp{position:absolute;left:50%;top:50%;width:200px;height:200px;margin:-100px 0 0 -100px;pointer-events:none;opacity:0;z-index:5}
+.stamp.go{animation:st .9s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes st{0%{opacity:0;transform:scale(2.4) rotate(-20deg)}35%{opacity:.95;transform:scale(1) rotate(-12deg)}80%{opacity:.95}100%{opacity:0;transform:scale(1) rotate(-12deg)}}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:#e9dfc8;color:#1a1510;padding:12px 22px;font-size:14px;border-radius:2px;opacity:0;transition:.3s;z-index:20;pointer-events:none}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:15}
+@media(max-width:600px){.btn{padding:16px 28px}.actions .btn{flex:1 1 100%}}
+@media(prefers-reduced-motion:reduce){.ball{display:none}*{animation-duration:.01s!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<section class="hero">
+  <svg class="ball" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#a9622d"/><path d="M2 20h36M20 2v36M7 7c8 8 8 18 0 26M33 7c-8 8-8 18 0 26" stroke="#2b1a0e" stroke-width="1.6" fill="none"/></svg>
+  <div class="eyebrow">THE INTERNATIONAL LARPING CERTIFICATION BOARD™</div>
+  <h1>Some people are built different. <span>Some people are just insane.</span></h1>
+  <p class="sub">Officially recognizing individuals who have demonstrated extraordinary levels of larping.</p>
+  <button class="btn" id="start">GET CERTIFIED</button>
+  <div class="disc">100% unofficial. 0% credibility. Unlimited delusion.</div>
+</section>
+
+<section id="gen">
+  <div class="wrap">
+    <div class="panel">
+      <div class="field">
+        <label for="name">Recipient's name</label>
+        <input id="name" type="text" maxlength="40" autocomplete="off" placeholder="Enter a name">
+        <div class="err" id="err" role="alert"></div>
+      </div>
+      <button class="btn" id="make">GENERATE CERTIFICATE</button>
+    </div>
+    <div class="actions">
+      <button class="btn ghost" id="png">DOWNLOAD PNG</button>
+      <button class="btn ghost" id="pdf">DOWNLOAD PDF</button>
+    </div>
+    <div class="stage">
+      <div id="box">
+        <div id="cert">
+          <svg class="tex" width="1123" height="794" aria-hidden="true"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .42  0 0 0 0 .25  0 0 0 .22 0"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>
+          <div class="b1"></div><div class="b2"></div>
+          <svg class="c tl" viewBox="0 0 64 64" fill="none" stroke="#a88650" stroke-width="2"><path d="M2 62V2h60"/><path d="M12 62V12h50"/><circle cx="22" cy="22" r="6"/><path d="M22 6v8M6 22h8"/></svg>
+          <svg class="c tr" viewBox="0 0 64 64" fill="none" stroke="#a88650" stroke-width="2"><path d="M2 62V2h60"/><path d="M12 62V12h50"/><circle cx="22" cy="22" r="6"/><path d="M22 6v8M6 22h8"/></svg>
+          <svg class="c bl" viewBox="0 0 64 64" fill="none" stroke="#a88650" stroke-width="2"><path d="M2 62V2h60"/><path d="M12 62V12h50"/><circle cx="22" cy="22" r="6"/><path d="M22 6v8M6 22h8"/></svg>
+          <svg class="c br" viewBox="0 0 64 64" fill="none" stroke="#a88650" stroke-width="2"><path d="M2 62V2h60"/><path d="M12 62V12h50"/><circle cx="22" cy="22" r="6"/><path d="M22 6v8M6 22h8"/></svg>
+
+          <div class="t org">THE INTERNATIONAL LARPING CERTIFICATION BOARD™</div>
+          <div class="t osub">OFFICIAL RECOGNITION OF UNHINGED BEHAVIOUR</div>
+          <div class="t title">CERTIFICATE<br>OF INSANE LARPING</div>
+          <div class="t pre">This certificate is proudly presented to</div>
+          <div class="t nm"><span id="cname">Your Name Here</span></div>
+          <div class="nline"></div>
+          <div class="t body">For demonstrating an exceptional and frankly concerning commitment to the art of larping, unmatched levels of delusion, and an unwavering dedication to the craft.</div>
+          <div class="t stm" id="stm"></div>
+
+          <svg class="art" viewBox="0 0 190 240" aria-label="Basketball thrown from the moon toward Earth">
+            <defs><radialGradient id="eg" cx=".35" cy=".35"><stop offset="0" stop-color="#7f9aa6"/><stop offset="1" stop-color="#3f5a68"/></radialGradient></defs>
+            <circle cx="148" cy="44" r="34" fill="#d8cdb4" stroke="#a88650" stroke-width="1.5"/>
+            <circle cx="136" cy="34" r="6" fill="#c3b697"/><circle cx="160" cy="56" r="8" fill="#c3b697"/><circle cx="150" cy="30" r="3" fill="#c3b697"/>
+            <path d="M126 70C100 90 70 120 38 200" stroke="#a88650" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round" fill="none"/>
+            <path d="M120 78C104 96 92 112 80 132" stroke="#8c6a3f" stroke-width="7" stroke-linecap="round" opacity=".25" fill="none"/>
+            <path d="M118 74C96 96 88 112 76 134" stroke="#8c6a3f" stroke-width="3" stroke-linecap="round" opacity=".35" fill="none"/>
+            <g transform="translate(84 118)"><circle r="17" fill="#b4672f" stroke="#4b2a12" stroke-width="1.5"/><path d="M-17 0h34M0-17v34M-12-12c8 8 8 16 0 24M12-12c-8 8-8 16 0 24" stroke="#4b2a12" stroke-width="1.2" fill="none"/></g>
+            <circle cx="36" cy="208" r="16" fill="url(#eg)"/><path d="M26 204c4-6 10-6 12-2s-2 8-6 8-8 2-6-6zM40 214c4-1 6 1 6 3" fill="#6d8a5e"/>
+            <text x="95" y="236" text-anchor="middle" font-family="Instrument Sans,sans-serif" font-size="8" letter-spacing="2" fill="#7d6841">ONE SMALL THROW FOR LARPKIND</text>
+          </svg>
+
+          <div class="bot">
+            <div class="sig"><b>R. Ballsworth III</b><small>DIRECTOR OF DELUSION</small></div>
+            <div class="meta"><div>ID: <b id="cid"></b></div><div>ISSUED: <b id="cdate"></b></div><div>CLASS: <b>EXTREME LARPER</b></div></div>
+          </div>
+          <svg class="seal" viewBox="0 0 110 110">
+            <defs><path id="arc" d="M55 55m-36 0a36 36 0 1 1 72 0a36 36 0 1 1-72 0"/></defs>
+            <circle cx="55" cy="55" r="52" fill="#a88650"/><circle cx="55" cy="55" r="48" fill="none" stroke="#f4ecdb" stroke-width="1.2"/><circle cx="55" cy="55" r="27" fill="none" stroke="#f4ecdb" stroke-width="1"/>
+            <text font-family="Instrument Sans,sans-serif" font-weight="600" font-size="9.5" letter-spacing="2.6" fill="#f4ecdb"><textPath href="#arc" startOffset="0">CERTIFIED INSANE • CERTIFIED INSANE •</textPath></text>
+            <path d="M55 38l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z" fill="#f4ecdb"/>
+          </svg>
+          <div class="t foot">This document carries absolutely no legal, academic, professional, or social authority.</div>
+        </div>
+      </div>
+      <svg class="stamp" id="stamp" viewBox="0 0 200 200"><circle cx="100" cy="100" r="92" fill="none" stroke="#a9301f" stroke-width="6"/><circle cx="100" cy="100" r="80" fill="none" stroke="#a9301f" stroke-width="2"/><text x="100" y="96" text-anchor="middle" font-family="Cormorant Garamond,serif" font-weight="700" font-size="30" fill="#a9301f">CERTIFIED</text><text x="100" y="126" text-anchor="middle" font-family="Cormorant Garamond,serif" font-weight="700" font-size="30" fill="#a9301f">INSANE</text></svg>
+    </div>
+  </div>
+</section>
+<div id="toast" role="status"></div>
+<canvas id="cf"></canvas>
+
+<script>
+(function(){
+  // Main statement on the certificate
+  var STATEMENT = "KEEP SHOOTING, MY GUY.";
+  var $ = function(id){return document.getElementById(id)};
+  var cert=$('cert'), box=$('box'), nameIn=$('name'), cname=$('cname'), err=$('err');
+  $('stm').textContent = STATEMENT;
+
+  function newMeta(){
+    var a=new Uint8Array(4); crypto.getRandomValues(a);
+    var h=Array.prototype.map.call(a,function(x){return x.toString(16).padStart(2,'0')}).join('').toUpperCase();
+    $('cid').textContent='ILCB-'+h.slice(0,4)+'-'+h.slice(4);
+    $('cdate').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}).toUpperCase();
+  }
+  function clean(){return nameIn.value.replace(/\s+/g,' ').trim()}
+  function fit(){
+    cname.style.fontSize='68px';
+    var s=68; while(cname.scrollWidth>600 && s>22){s-=2; cname.style.fontSize=s+'px'}
+  }
+  function rescale(){
+    var k=Math.min(1,box.parentNode.clientWidth/1123);
+    cert.style.transform='scale('+k+')'; box.style.height=(794*k)+'px';
+  }
+  function update(){
+    cname.textContent = clean() || 'Your Name Here';
+    nameIn.classList.remove('bad'); err.textContent=''; fit();
+  }
+  function valid(){
+    if(!clean()){ nameIn.classList.add('bad'); err.textContent="Enter a name first. Empty names can't be certified."; nameIn.focus(); return false }
+    return true;
+  }
+  function toast(t){var el=$('toast'); el.textContent=t; el.classList.add('show'); clearTimeout(toast.t); toast.t=setTimeout(function(){el.classList.remove('show')},2600)}
+
+  function confetti(){
+    var c=$('cf'), x=c.getContext('2d'); c.width=innerWidth; c.height=innerHeight;
+    var cols=['#b8955a','#e6cc9a','#8c6a3f','#ece6d8'], p=[];
+    for(var i=0;i<70;i++) p.push({x:innerWidth/2,y:innerHeight*.55,vx:(Math.random()-.5)*14,vy:-Math.random()*14-4,r:Math.random()*5+3,c:cols[i%4],a:Math.random()*6});
+    var t=0;(function f(){x.clearRect(0,0,c.width,c.height);p.forEach(function(q){q.x+=q.vx;q.y+=q.vy;q.vy+=.35;q.a+=.2;x.fillStyle=q.c;x.save();x.translate(q.x,q.y);x.rotate(q.a);x.fillRect(-q.r,-q.r/2,q.r*2,q.r);x.restore()});if(++t<80)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})();
+  }
+  function generate(){
+    if(!valid()) return false;
+    nameIn.value=clean(); newMeta(); update();
+    var s=$('stamp'); s.classList.remove('go'); void s.getBoundingClientRect(); s.classList.add('go');
+    if(!matchMedia('(prefers-reduced-motion:reduce)').matches) confetti();
+    return true;
+  }
+  async function render(type){
+    await (document.fonts && document.fonts.ready);
+    var opts={pixelRatio:type==='png'?3.125:2.5,cacheBust:true,style:{transform:'none'},width:1123,height:794,backgroundColor:'#f4ecdb'};
+    return type==='png'?htmlToImage.toPng(cert,opts):htmlToImage.toJpeg(cert,Object.assign(opts,{quality:.95}));
+  }
+  function fname(ext){return 'larper-certificate-'+(clean().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'recipient')+'.'+ext}
+  async function dl(type){
+    if(!valid()) return;
+    toast('Preparing your certificate…');
+    try{
+      var url=await render(type==='png'?'png':'jpg');
+      if(type==='png'){ var a=document.createElement('a'); a.href=url; a.download=fname('png'); document.body.appendChild(a); a.click(); a.remove() }
+      else { var J=window.jspdf.jsPDF, d=new J({orientation:'landscape',unit:'mm',format:'a4'}); d.addImage(url,'JPEG',0,0,297,210); d.setProperties({title:'Certificate of Insane Larping'}); d.save(fname('pdf')) }
+      toast('Downloaded. You are now officially insane.');
+    }catch(e){ console.error(e); toast('Download failed. Please try again.') }
+  }
+
+  $('start').onclick=function(){ $('gen').classList.add('open'); rescale(); setTimeout(function(){$('gen').scrollIntoView({behavior:'smooth'}); nameIn.focus({preventScroll:true})},50) };
+  nameIn.addEventListener('input',update);
+  nameIn.addEventListener('keydown',function(e){if(e.key==='Enter')generate()});
+  $('make').onclick=generate;
+  $('png').onclick=function(){dl('png')};
+  $('pdf').onclick=function(){dl('pdf')};
+  addEventListener('resize',rescale);
+  newMeta(); update(); rescale();
+})();
+</script>
+</body>
+</html>
